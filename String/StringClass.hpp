@@ -1,4 +1,5 @@
 #include<iostream>
+#include <cstring>
 
 class String {
     private:
@@ -100,7 +101,7 @@ class String {
         
     
         //Member Functions
-        size_t length() const; // Retrieve length of the string in O(1) time
+        size_t getLength() const; // Retrieve length of the string in O(1) time
         //Here const at the end means this function does not modify any member variables of the class.
         const char*c_str() const; // Retrieve C-style null-terminated string
 
