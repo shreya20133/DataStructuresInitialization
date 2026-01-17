@@ -50,7 +50,7 @@ class String {
 
             For non owning memory, the class would not be responsible for managing the memory lifecycle.
         */
-        
+       
         //Constructors 
         String();   //Default Constructor
         String(const char *str); // from C-style string
@@ -70,6 +70,9 @@ class String {
         //Assignment Operators
         //Traditional Copy Assignment Operator
         String& operator=(const String &stringToCopy); // Copy Assignment Operator
+        //Here, const String &stringToCopy as argument means stringToCopy is an alias to the original object but we are not allowed to modify it through this reference because of const.
+        //This avoids unnecessary copying of the object when passed as argument.
+        //NOTE: This also expresses clear intent to the reader that this function will not modify the source object.
         
        // Copy-and-swap form assignment operator
         String& operator=(String other);
@@ -88,6 +91,21 @@ class String {
             After the swap, the temporary copy goes out of scope and its destructor is called, releasing the old resources of the current String.
         */
 
+        //Move Assignment Operator
+        String& operator=(String &&stringToMove) noexcept;
+        // noexcept specifier indicates that this function is guaranteed not to throw exceptions.
 
-       
+        //Destructor
+        ~String();
+        
+    
+        //Member Functions
+        size_t length() const; // Retrieve length of the string in O(1) time
+        //Here const at the end means this function does not modify any member variables of the class.
+        const char*c_str() const; // Retrieve C-style null-terminated string
+
+        char &operator[](size_t index); // Character access (non-const)
+
+        //SSO Optimizagion can be implemented later
+        //UTF-8 support can be implemented later
 };
