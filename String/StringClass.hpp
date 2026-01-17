@@ -107,6 +107,8 @@ class String {
 
         char &operator[](size_t index); // Character access (non-const)
 
+        void printString(const String& str) const;
+
         //SSO Optimizagion can be implemented later
         //UTF-8 support can be implemented later
 };
