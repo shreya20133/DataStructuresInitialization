@@ -70,7 +70,7 @@ class String {
        
         //Assignment Operators
         //Traditional Copy Assignment Operator
-        String& operator=(const String &stringToCopy); // Copy Assignment Operator
+        //String& operator=(const String &stringToCopy); // Copy Assignment Operator
         //Here, const String &stringToCopy as argument means stringToCopy is an alias to the original object but we are not allowed to modify it through this reference because of const.
         //This avoids unnecessary copying of the object when passed as argument.
         //NOTE: This also expresses clear intent to the reader that this function will not modify the source object.
@@ -95,6 +95,14 @@ class String {
         //Move Assignment Operator
         String& operator=(String &&stringToMove) noexcept;
         // noexcept specifier indicates that this function is guaranteed not to throw exceptions.
+
+        String& operator+=(const String &stringToAppend); // Concatenation Assignment Operator
+        String& operator+=(const char *strToAppend); // Concatenation Assignment Operator for C-style string
+        String& operator+(const String &other) const; // Concatenation Operator
+        String& operator+(const char *other) const; // Concatenation Operator for C-style string
+        String& operator+(const char other) const; // Concatenation Operator for single character
+        String& operator+(const std::string &other) const; // Concatenation Operator for std::string
+        String& operator==(const String &other) const; // Equality Operator
 
         //Destructor
         ~String();

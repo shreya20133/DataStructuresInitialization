@@ -66,6 +66,8 @@ Then constructor body runs:
    It initializes members directly rather than assigning values in the constructor body.
    Members are constructed directly. data gets heap memory immediately.length is initialized to 0.
    Constructor body runs afterward. No invalid temporary states.
+   const char members and reference members must be initialized this way.
+   If another class which only has parameterized constructors is a member, it must be initialized this way.
 */
 // Default Constructor
 String::String() : data(new char[1]),length(0) {
@@ -150,6 +152,37 @@ void String::printString(const String& str) const {
 String::~String() {
     delete[] data; // Free allocated memory
 }
+/* Move Constructor */
+/*
+lvalue vs rvalue:
+An lvalue refers to an object that has a persistent state and can be addressed in memory (i.e., has a name).
+An rvalue is a temporary object or value that does not have a persistent state and cannot be addressed in memory (i.e., typically unnamed).
+Move constructor is invoked when an rvalue (temporary object) is used to initialize a new object.
+String a = String("Temporary"); // Move constructor is called here
+The move constructor transfers ownership of resources from the temporary object to the new object, leaving the temporary in a valid but unspecified state.
+*/
+String::String(String &&stringToMove) noexcept 
+    : data(stringToMove.data), length(stringToMove.length) {
+    // Leave stringToMove in a valid state
+    stringToMove.data = new char[1]; // Allocate memory for empty string
+    stringToMove.data[0] = '\0';
+    stringToMove.length = 0;
+}
+
+//Copy Assignment Operator
+String& String::operator=(String stringToCopy){
+    if( this != &stringToCopy){
+        //Self-assignment check eg. String a; a = a;
+        delete[] data; // Free existing memory
+        length = stringToCopy.length;
+        data = new char[length + 1]; // Allocate new memory
+        std::memcpy(data, stringToCopy.data, length + 1); // Copy including null-terminator
+    }
+    return *this;
+}
+
+//Move Assignment Operator
+
 
 int main(){
     //Example usage of the String class
@@ -161,6 +194,9 @@ int main(){
 
     String str3(str2);  // Copy Constructor
     std::cout << "str3 (copy of str2): "<<str3.c_str()<<" Length: "<<str3.getLength()<<std::endl;
+
+    String str3_copy = str2;  // Copy Constructor via direct initialization
+    std::cout << "str3_copy (copy of str2 via direct initialization): "<<str3_copy.c_str()<<" Length: "<<str3_copy.getLength()<<std::endl;
 
     String str4(nullptr); // Handle null pointer input
     std::cout << "str4 (from nullptr): "<<str4.c_str()<<" Length: "<<str4.getLength()<<std::endl;
@@ -182,6 +218,19 @@ int main(){
     String str10(str9); // Copy Constructor using String reference
     std::cout << "str10 (copy of str2 via String reference): "<<str10.c_str()<<" Length: "<<str10.getLength()<<std::endl;   
 
+    //Move Constructor
+    String str11(String("Temporary String")); // Move constructor
+    std::cout << "str11 (moved from temporary): "<<str11.c_str()<<" Length: "<<str11.getLength()<<std::endl;    
+    String str12(std::move(str2)); // Move constructor using std::move
+    std::cout << "str12 (moved from str2): "<<str12.c_str()<<" Length: "<<str12.getLength()<<std::endl;    
+    std::cout << "str2 after move: "<<str2.c_str()<<" Length: "<<str2.getLength()<<std::endl;
+
+    //Copy Assignment Operator
+    String str13;
+    str13 = str3; // Copy Assignment Operator
+    std::cout << "str13 (after copy assignment from str3): "<<str13.c_str()<<" Length: "<<str13.getLength()<<std::endl;
+
+    //Overloading << and >> operators for printing and input can be added later
 
     return 0;
 }
