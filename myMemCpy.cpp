@@ -18,7 +18,7 @@ void* myMemCpy(void* dest, const void* src,size_t n){
     return dest; // Return the destination pointer because memcpy returns the destination pointer
 }
     
-void myMemMove(void *dest, const void *src, size_t n) {
+void* myMemMove(void *dest, const void *src, size_t n) {
 
     unsigned char* d = static_cast<unsigned char*>(dest);
     const unsigned char* s = static_cast<const unsigned char*>(src);
@@ -31,6 +31,8 @@ void myMemMove(void *dest, const void *src, size_t n) {
         for(size_t i=n;i>0;i--){
             d[i-1] = s[i-1]; // Copy each byte from source to destination in reverse order
         }
+    }
+    return dest; // Return the destination pointer because memmove returns the destination pointer
 }
 int main(){
 
