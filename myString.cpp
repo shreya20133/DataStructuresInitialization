@@ -4,7 +4,7 @@ using namespace std;
 
 class myString{
     public :
-        myString(): str('\0'), length(0) {} // Default constructor - Empty string initialization
+        myString(): str(nullptr), length(0) {} // Default constructor - Empty string initialization
         myString(const char* s) : str(new char[strlen(s) + 1]), length(strlen(s)) { // Parameterized constructor
             strcpy(str, s); // Copy the input string to the member variable
         }   
@@ -26,7 +26,10 @@ class myString{
         bool operator==(const myString& other) const{
             return strcmp(str,other.str) == 0; // Compare the strings using strcmp
         }
-
+        friend ostream& operator<<(ostream& os, const myString& s){//Declared as friend function so that it can access the private members of the class. This allows us to directly access the 'str' member variable of the 'myString' class and output its value to the output stream.
+            os << s.str; // Output the string to the output stream
+            return os;
+        }
     private :
         char* str; // Pointer to hold the string data - Why not just use char str[length+1]? Because we want to allocate memory dynamically based on the length of the input string, and using a pointer allows us to do that. Using a fixed-size array would limit the maximum length of the string we can store.
         size_t length; // Length of the string
@@ -39,6 +42,7 @@ int main(){
     myString s2("Shreya");
     myString s3 = s1;
     myString s4(s2);
+    cout << "s1 : " << s1 << "\n s2: " << s2 << "\n s3 : " << s3 << "\n s4 : "<<s4<<endl;
     s4 = s1; //copy assignment operator will be called here
     s4 = "World"; //copy assignment operator will be called here
     if(s4 == s1) //comparison operator will be called here
